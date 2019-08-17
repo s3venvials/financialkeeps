@@ -1,36 +1,59 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class Nav extends Component {
 
     render() {
-        return (
-            <div className="ui top attached menu">
+        if(this.props.auth['username'] !== undefined) {
+            return (
+                <div className="ui stackable menu">
 
-                <div className="ui dropdown icon item">
-                    <i className="wrench icon"></i>
+                        <a href="/" className="item">
+                            <i className="balance scale icon"></i> Financial Keeps
+                        </a>
+
+                        <a href="/dashboard" className="item">
+                            <i className="tachometer alternate icon"></i> Dashboard
+                        </a>
+
+                    <div className="right menu">
+
+                        <div className="item">
+                        <i className="user circle icon"></i> {this.props.auth['username']} 
+                        </div>
+
+                        <a href="/api/logout" className="item">
+                            <i className="sign out icon"></i> Logout
+                        </a>
+
+                    </div>
+
                 </div>
+            )
+        } else {
+            return (
+                <div className="ui top menu">
+                        
+                        <a href="/" className="item">
+                            <i className="balance scale icon"></i> Financial Keeps
+                        </a>
 
-                <a href="http://localhost:3000/" class="ui item">
-                    Dashboard
-                </a>
+                        <div className="right menu">
 
-                <div className="right menu">
-                    <a href="http://localhost:5000/auth/google" class="ui item">
-                        Login to Google
-                    </a>
+                            <a href="/auth/google" className="item">
+                                <i className="sign in icon"></i> Login with Google
+                            </a>
 
-                    <a href="http://localhost:5000/api/logout" class="ui item">
-                        Logout
-                    </a>
-
-                    <a href="http://localhost:5000/api/current_user" class="ui item">
-                        Current User
-                    </a>
+                        </div>
+                        
                 </div>
-
-            </div>
-        )
+            )
+        }
     }
 }
 
-export default Nav;
+function mapStateToProps({auth}) {
+    return { auth };
+}
+
+export default connect(mapStateToProps)(Nav);
