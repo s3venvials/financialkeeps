@@ -12,13 +12,21 @@ module.exports = app => {
     '/auth/google/callback',
     passport.authenticate('google'),
     (req, res) => {
-      res.redirect('http://localhost:3000/dashboard');
+      if (process.env.NODE_ENV === 'production') {
+        res.redirect('https://financialkeeps.herokuapp.com/dashboard');
+      } else {
+        res.redirect('http://localhost:3000/dashboard');
+      }
     }
   );
 
   app.get('/api/logout', (req, res) => {
     req.logout();
+    if (process.env.NODE_ENV === 'production') {
+      res.redirect('https://financialkeeps.herokuapp.com');
+    } else {
     res.redirect('http://localhost:3000/');
+    }
   });
 
   app.get('/api/current_user', (req, res) => {
