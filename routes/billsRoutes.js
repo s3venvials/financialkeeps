@@ -1,19 +1,34 @@
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
 
-const Bills = mongoose.model('bills');
+const Bill = mongoose.model('bills');
 
 module.exports = app => {
-    app.post('/api/bills', requireLogin, (req, res) => {
+    app.post('/api/bills', requireLogin, async (req, res) => {
         const {title, amount, duedate} = req.body;
         
-        const Bills = new Bills({
+        const Bills = new Bill({
             title,
             amount,
             duedate,
             _user: req.user.id
         });
 
-        Bills.save();
+       
+        try {
+            await Bills.save();
+            const user = await req.user.save();
+
+            res.send(user);
+        } catch (err) {
+            res.status(422).send(err);
+        }
+        
+    });
+
+    app.get('/api/bills', async (req, res) => {
+        const bills = await Bill.find({ _user: req.user.id });
+
+        res.send(bills);
     });
 };

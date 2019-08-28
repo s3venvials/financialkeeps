@@ -37,14 +37,6 @@ class Nav extends Component {
                         <a href="/" className="item">
                             <i className="balance scale icon"></i> Financial Keeps
                         </a>
-
-                        <div className="right menu">
-
-                            <a href="/auth/google" className="item">
-                                <i className="sign in icon"></i> Login with Google
-                            </a>
-
-                        </div>
                         
                 </div>
             )

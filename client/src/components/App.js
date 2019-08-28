@@ -20,7 +20,7 @@ class App extends Component {
             <div>
                 <BrowserRouter>
                     <Nav />
-                    <div className="ui container" style={{ marginTop: '7em'}}>
+                    <div className="ui container" style={{ marginTop: '2em', marginBottom: '5em' }}>
                         <Route exact path="/" component={Landing} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route path="/bills/new" component={BillsNew} />

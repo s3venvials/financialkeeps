@@ -3,22 +3,17 @@ import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import BillsField from './BillsField';
-
-const FIELDS = [
-    { label: 'Bill Title', name: 'title' },
-    { label: 'Amount', name: 'amount' },
-    { label: 'Due Date', name: 'duedate'}
-];
+import formFields from './formFields';
 
 class BillsForm extends Component {
 
     renderFields() {
-        return _.map(FIELDS, ({ label, name}) => {
+        return _.map(formFields, ({ label, name, type}) => {
             return (
                 <Field 
                 component={BillsField} 
                 key={name} 
-                type="text" 
+                type={type} 
                 label={label} 
                 name={name} 
                 />
@@ -29,10 +24,10 @@ class BillsForm extends Component {
     render() {
         return (
             <div>
-                <form className="ui form" onSubmit={this.props.handleSubmit(values => console.log(values))}>
+                <form className="ui form attached fluid segment" onSubmit={this.props.handleSubmit(this.props.onSurveySubmit)}>
                     {this.renderFields()}
-                    <button className="ui teal basic right floated button" type="submit">Submit</button>
-                    <Link to="/dashboard" className="ui red basic left floated button">Cancel</Link>
+                    <Link to="/dashboard" className="ui red basic button">Cancel</Link>
+                    <button className="ui teal basic button" type="submit">Next</button>
                 </form>
             </div>
         );
@@ -42,14 +37,17 @@ class BillsForm extends Component {
 function validate(values) {
     const errors = {};
 
-    if(!values.title) {
-        errors.title = "Please provide a title.";
-    }
+    _.each(formFields, ({ name }) => {
+        if(!values[name]) {
+            errors[name] = 'You must provide a value';
+        }
+    });
 
     return errors;
 }
 
 export default reduxForm({
     validate,
-    form: 'billsForm'
+    form: 'billsForm',
+    destroyOnUnmount: false
 })(BillsForm);
