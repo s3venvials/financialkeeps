@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
 require('./models/Bills');
+require('./models/GrossPay');
 require('./services/passport');
 
 mongoose.Promise = global.Promise;
@@ -26,6 +27,7 @@ app.use(passport.session());
 
 require('./routes/authRoutes')(app);
 require('./routes/billsRoutes')(app);
+require('./routes/grossRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets

@@ -8,6 +8,8 @@ import Nav from './Nav';
 import Landing from './Landing';
 import Dashboard from './Dashboard';
 import BillsNew from './Bills/BillsNew';
+import GrossPayNew from './GrossPay/New';
+import GrossPayEdit from './GrossPay/Edit';
 import Footer from './Footer';
 
 class App extends Component {
@@ -24,6 +26,8 @@ class App extends Component {
                         <Route exact path="/" component={Landing} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route path="/bills/new" component={BillsNew} />
+                        <Route path="/grosspay/new" component={GrossPayNew} />
+                        <Route path="/grosspay/edit" component={GrossPayEdit} />
                     </div>
                     <Footer />
                 </BrowserRouter>

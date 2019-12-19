@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
-import BillsForm from './BillsForm';
-import BillsFormReview from './BillsFormReview';
+import Form from './Form';
+import FormReview from './FormReview';
 
-class BillsNew extends Component {
+class GrossPayNew extends Component {
     state = { showReview: false };
 
     renderContent() {
         if(this.state.showReview) {
-            return <BillsFormReview 
+            return <FormReview 
                 onCancel={() => this.setState({ showReview: false })}
             />;
         }
 
-        return <BillsForm onBillsSubmit={() =>
+        return <Form onGrossPaySubmit={() =>
                         this.setState({ showReview: true }
                     )} 
                 />
@@ -24,7 +24,7 @@ class BillsNew extends Component {
             <div>
                 <div className="ui attached message">
                         <div className="header">
-                            <h3>Add New Bill</h3>
+                            <h3>Add New Gross Pay</h3>
                         </div>
                 </div>
             {this.renderContent()}
@@ -34,5 +34,5 @@ class BillsNew extends Component {
 }
 
 export default reduxForm({
-    form: 'billsForm'
-})(BillsNew);
+    form: 'grossPayForm'
+})(GrossPayNew);

@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import BillsField from './BillsField';
-import formFields from './formFields';
+import Fields from './Fields';
+import formFields from './FormFields';
 
-class BillsForm extends Component {
+class GrossPayForm extends Component {
 
     renderFields() {
         return _.map(formFields, ({ label, name, type}) => {
             return (
                 <Field 
-                component={BillsField} 
+                component={Fields} 
                 key={name} 
                 type={type} 
                 label={label} 
@@ -24,7 +24,7 @@ class BillsForm extends Component {
     render() {
         return (
             <div>
-                <form className="ui form attached fluid segment" onSubmit={this.props.handleSubmit(this.props.onBillsSubmit)}>
+                <form className="ui form attached fluid segment" onSubmit={this.props.handleSubmit(this.props.onGrossPaySubmit)}>
                     {this.renderFields()}
                     <Link to="/dashboard" className="ui red basic button">Cancel</Link>
                     <button className="ui teal basic button" type="submit">Next</button>
@@ -48,6 +48,6 @@ function validate(values) {
 
 export default reduxForm({
     validate,
-    form: 'billsForm',
+    form: 'grossPayForm',
     destroyOnUnmount: false
-})(BillsForm);
+})(GrossPayForm);

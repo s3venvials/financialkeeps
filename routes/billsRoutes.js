@@ -31,4 +31,8 @@ module.exports = app => {
 
         res.send(bills);
     });
+
+    app.delete('/api/delete_bill', (req, res) => {
+        res.send('bill deleted');
+    });
 };

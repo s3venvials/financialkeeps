@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import formFields from './formFields';
+import formFields from './FormFields';
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../actions';
 
-const BillsReview = ({ onCancel, formValues, submitBills, history }) => {
+const GrossPayReview = ({ onCancel, formValues, submitGrossPay, history }) => {
     const reviewFields = _.map(formFields, ({ name, label }) => {
         return (
             <div className="item" key={name}>
@@ -26,7 +26,7 @@ const BillsReview = ({ onCancel, formValues, submitBills, history }) => {
             <button className="ui basic yellow button" onClick={onCancel}>
                 Back
             </button>
-            <button className="ui right floated basic teal button" onClick={() => submitBills(formValues, history)}>
+            <button className="ui right floated basic teal button" onClick={() => submitGrossPay(formValues, history)}>
                 Confirm Entries
             </button>
         </div>
@@ -34,10 +34,9 @@ const BillsReview = ({ onCancel, formValues, submitBills, history }) => {
 }
 
 function mapStateToProps(state) {
-    console.log(state);
     return {
-        formValues: state.form.billsForm.values
+        formValues: state.form.grossPayForm.values
     };
 }
 
-export default connect(mapStateToProps, actions)(withRouter(BillsReview));
+export default connect(mapStateToProps, actions)(withRouter(GrossPayReview));
