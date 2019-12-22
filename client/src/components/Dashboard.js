@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import BillsList from './Bills/BillsList';
-import GrossPayList from './GrossPay/List';
+import BillsList from '../components/Bills/BillsList';
 
 class Dashboard extends Component {
 
@@ -9,11 +8,10 @@ class Dashboard extends Component {
             <div>
                 <h3 className="ui left floated">Dashboard</h3>
                 <div className="ui divider"></div>
-                <GrossPayList />
                 <BillsList />
             </div>
         )
     }
-}
+} 
 
 export default Dashboard;

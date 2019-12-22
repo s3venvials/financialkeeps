@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchGrossPay, editGrossPay } from '../../actions';
 
 class GrossPayEdit extends Component {
-    state = { formValue: "" }
-
-    componentDidMount() {
-        this.props.fetchGrossPay();
-    };
 
     render() {
         return (
@@ -17,9 +10,9 @@ class GrossPayEdit extends Component {
                         <h3>Edit Gross Pay</h3>
                         <form className="ui form">
                             <div className="field">
-                                <input type="text" name="amount" placeholder={this.props.grossPay[0].amount} />
+                                <input type="text" name="amount" />
                             </div>
-                            <button className="ui basic blue button" onClick={() => editGrossPay()}>
+                            <button className="ui basic blue button">
                                 Update
                             </button>
                             <a href="/dashboard" className="ui button">Cancel</a>
@@ -31,8 +24,4 @@ class GrossPayEdit extends Component {
     }
 }
 
-function mapStateToProps({ grossPay }) {
-    return { grossPay };
-}
-
-export default connect(mapStateToProps, { fetchGrossPay, editGrossPay })(GrossPayEdit);
+export default GrossPayEdit;

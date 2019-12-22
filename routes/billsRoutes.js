@@ -4,7 +4,7 @@ const requireLogin = require('../middlewares/requireLogin');
 const Bill = mongoose.model('bills');
 
 module.exports = app => {
-    app.post('/api/bills', requireLogin, async (req, res) => {
+    app.post('/api/new/bill', requireLogin, async (req, res) => {
         const {title, amount, duedate} = req.body;
         
         const Bills = new Bill({
@@ -29,10 +29,62 @@ module.exports = app => {
     app.get('/api/bills', async (req, res) => {
         const bills = await Bill.find({ _user: req.user.id });
 
-        res.send(bills);
+        if(bills.id === undefined){
+            setTimeout(function(){
+                res.send(bills);
+            }, 5000);
+        } else {
+            res.send(bills);
+        }
+        
     });
 
-    app.delete('/api/delete_bill', (req, res) => {
-        res.send('bill deleted');
+    app.post('/api/delete', async (req, res) => {
+        let bills = req.body;
+
+        let error = "";
+
+        for(var i = 0; i < bills.data.length; i++){
+            Bill.deleteOne({ _id: bills.data[i]._id }, (err) => {
+                if(err){
+                    error = err;
+                }
+            });
+        }
+
+        if(error !== ""){
+            res.send({ "error": error });
+        } else {
+            const bills = await Bill.find({ _user: req.user.id });
+            res.send({ "success": "Bills were deleted successfully!", bills });
+        }
+    });
+
+    app.get("/edit/bill/:id", (req, res) => {
+        let id = req.params.id;
+
+        Bill.findById({ _id: id }, (err, foundBill) => {
+            if(err){
+                res.send({ "error": err });
+            } else {
+                res.send(foundBill);
+            }
+        });
+    });
+
+    app.post("/edit/bill/update", (req, res) => {
+        let { title, amount, duedate, id } = req.body;
+
+        Bill.findByIdAndUpdate({ _id: id }, { $set: {
+            title,
+            amount,
+            duedate
+        }}, (err, updatedBill) => {
+            if(err){
+                res.send({ error: err });
+            } else {
+                res.send({ "success": "Bill was updated successfully!" });
+            }
+        });
     });
 };

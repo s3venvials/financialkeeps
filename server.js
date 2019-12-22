@@ -1,5 +1,5 @@
-    
 const express = require('express');
+const cors = require("cors");
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -11,11 +11,12 @@ require('./models/GrossPay');
 require('./services/passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false });
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors(keys.corsOptions));
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
