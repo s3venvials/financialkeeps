@@ -52,8 +52,7 @@ class EditProfile extends Component {
         } else {
             axios.post(url, { grosspay, netpay, frequencyofpay, newuser, id }, { withCredentials: true })
                 .then((res) => {
-                    this.setGlobal({ frequencyofpay: res.data.frequencyofpay });
-                    //window.location = "/dashboard";
+                    window.location = "/dashboard";
                 }).catch((e) => console.log(e));
         }
     }
