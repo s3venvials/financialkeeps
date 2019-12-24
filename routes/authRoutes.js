@@ -14,9 +14,9 @@ module.exports = app => {
     (req, res) => {
       if (process.env.NODE_ENV === 'production') {
         if(req.user.newuser){
-          res.redirect('https://financialkeeps.herokuapp.com/new/profile');
+          res.redirect('http://localhost:5000/new/profile');
         } else {
-          res.redirect('https://financialkeeps.herokuapp.com/dashboard');
+          res.redirect('http://localhost:5000/dashboard');
         }
       } else {
         if(req.user.newuser){
