@@ -13,7 +13,11 @@ module.exports = app => {
     passport.authenticate('google'),
     (req, res) => {
       if (process.env.NODE_ENV === 'production') {
-        res.redirect('https://financialkeeps.herokuapp.com/dashboard');
+        if(req.user.newuser){
+          res.redirect('https://financialkeeps.herokuapp.com/new/profile');
+        } else {
+          res.redirect('https://financialkeeps.herokuapp.com/dashboard');
+        }
       } else {
         if(req.user.newuser){
           res.redirect('http://localhost:3000/new/profile');
