@@ -10,7 +10,11 @@ class BillsEdit extends Component {
             title: "",
             amount: "",
             duedate: "",
-            id: ""
+            isRecurring: false,
+            transactiontype: "",
+            paymentperiod: "",
+            id: "",
+            error: ""
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -19,12 +23,15 @@ class BillsEdit extends Component {
 
     componentDidMount() {
         let url = "http://localhost:5000/edit/bill/" + this.props.match.params.id;
- 
+
         axios.get(url)
             .then((res) => {
                 this.setState({ title: res.data.title });
                 this.setState({ amount: res.data.amount });
                 this.setState({ duedate: res.data.duedate });
+                this.setState({ isRecurring: res.data.isRecurring });
+                this.setState({ transactiontype: res.data.transactiontype });
+                this.setState({ paymentperiod: res.data.paymentperiod });
                 this.setState({ id: res.data._id });
             })
     }
@@ -34,21 +41,45 @@ class BillsEdit extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit(e){
+    handleChecked(e) {
+        console.log(e.target.checked);
+        const { name, checked } = e.target;
+        this.setState({ [name]: checked });
+    }
+
+    handleSubmit(e) {
         e.preventDefault();
 
-        const { title, amount, duedate, id } = this.state;
+        const { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod } = this.state;
         let url = "http://localhost:5000/edit/bill/update";
 
-        axios.post(url, { title, amount, duedate, id })
-            .then((res) => {
-                window.location = "/dashboard";
-            }).catch((e) => console.log(e));
+        let regexp = /^\d+(\.\d{1,2})?$/;
+
+        if (title === "") {
+            this.setState({ error: "Please provide a bill title." });
+        } else if (amount === "" || regexp.test(amount) === false) {
+            this.setState({ error: "Please provide a valid bill amount." });
+        } else {
+
+            axios.post(url, { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod })
+                .then((res) => {
+                    window.location = "/dashboard";
+                }).catch((e) => console.log(e));
+        }
+    }
+
+    renderMessage() {
+        if (this.state.error !== "") {
+            return <div className="ui red message">{this.state.error}</div>
+        } else {
+            return null;
+        }
     }
 
     render() {
         return (
             <div>
+                {this.renderMessage()}
                 <div className="ui attached message">
                     <div className="header">
                         <h3>Edit Bill</h3>
@@ -63,12 +94,34 @@ class BillsEdit extends Component {
                             </div>
                             <div className="field">
                                 <label>Date</label>
-                                <input type="text" name="title" value={this.state.duedate} onChange={this.handleChange} />
+                                <input type="text" name="duedate" value={this.state.duedate} onChange={this.handleChange} />
                             </div>
+
+                            <div className="field">
+                                <label>Recurring?</label>
+                                <input type="checkbox" name="isRecurring" value={this.state.isRecurring} onChange={this.handleChecked} checked={this.state.isRecurring} />
+                            </div>
+
+                            <div className="field">
+                                <select name="transactiontype" onChange={this.handleChange}>
+                                    <option value={this.state.transactiontype}>{this.state.transactiontype}</option>
+                                    <option value="Manual">Manual</option>
+                                    <option value="Auto">Automatic</option>
+                                </select>
+                            </div>
+
+                            <div className="field">
+                                <select name="paymentperiod" onChange={this.handleChange} >
+                                    <option value="this.state.paymentperiod">{this.state.paymentperiod}</option>
+                                    <option value="PayDay1">PayDay1</option>
+                                    <option value="PayDay2">PayDay2</option>
+                                </select>
+                            </div>
+
                             <input type="hidden" name="id" value={this.state.id} />
 
                             <button className="ui basic blue button" type="submit" onClick={this.handleSubmit} >Update</button>
-                            <Link className="ui basic button" to="/dashboard">Cancel</Link>
+                            <Link className="ui basic button" to="/managebills">Cancel</Link>
                         </form>
                     </div>
                 </div>

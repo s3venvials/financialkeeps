@@ -7,11 +7,15 @@ const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
 require('./models/Bills');
-require('./models/GrossPay');
 require('./services/passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect(keys.mongoURI, 
+  { 
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  });
 
 const app = express();
 
@@ -28,7 +32,7 @@ app.use(passport.session());
 
 require('./routes/authRoutes')(app);
 require('./routes/billsRoutes')(app);
-require('./routes/grossRoutes')(app);
+require('./routes/userRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets

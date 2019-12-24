@@ -15,7 +15,11 @@ module.exports = app => {
       if (process.env.NODE_ENV === 'production') {
         res.redirect('https://financialkeeps.herokuapp.com/dashboard');
       } else {
-        res.redirect('http://localhost:3000/dashboard');
+        if(req.user.newuser){
+          res.redirect('http://localhost:3000/new/profile');
+        } else {
+          res.redirect('http://localhost:3000/dashboard');
+        }
       }
     }
   );

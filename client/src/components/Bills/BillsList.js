@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'reactn';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,7 +8,6 @@ class BillsList extends Component {
 
         this.state = {
             loader: "ui active centered inline loader",
-            data: [],
             selected: [],
             success: ""
         }
@@ -20,6 +19,8 @@ class BillsList extends Component {
     handleDelete(e) {
         e.preventDefault();
 
+        this.setState({ loader: "ui active centered inline loader" });
+
         this.setState({ selected: [] });
 
         let url = "http://localhost:5000/api/delete";
@@ -28,8 +29,9 @@ class BillsList extends Component {
 
         axios.post(url, { data }, { withCredentials: true })
             .then((res) => {
-                this.setState({ data: res.data.bills });
+                this.setGlobal({ data: res.data.bills });
                 this.setState({ success: res.data.success });
+                this.setState({ loader: "" });
             }).catch((e) => console.log(e));
     }
 
@@ -47,7 +49,7 @@ class BillsList extends Component {
 
     handleCheckChildeElement = (event) => {
 
-        var data = this.state.data;
+        var data = this.global.data;
 
         data.forEach(data => {
             if (data._id === event.target.value) {
@@ -67,7 +69,7 @@ class BillsList extends Component {
                 }
             }
         });
-        this.setState({ data });
+        this.setGlobal({ data });
     }
 
     componentDidMount() {
@@ -77,16 +79,18 @@ class BillsList extends Component {
             .then((res) => {
                 let data = res.data;
                 this.setState({ loader: "" });
-                this.setState({ data: data });
+                this.setGlobal({ data: data });
+                this.setGlobal({ frequencyofpay: res.data.frequencyofpay })
             });
     }
 
     renderBills() {
 
-        const { data, loader } = this.state;
+        const { loader } = this.state;
+        const { data } = this.global;
 
         if (loader === "" && data.length === 0) {
-            return <div className="ui blue message"><i className="info circle icon"></i> No bills have been added</div>;
+            return <div className="ui info message"><i className="info circle icon"></i> No bills have been added select the New button to get started.</div>;
         } else if (loader === "" && data.length !== 0) {
             return (
                 <table className="ui celled table">
@@ -95,18 +99,24 @@ class BillsList extends Component {
                             <th>Title</th>
                             <th>Amount</th>
                             <th>Due Date</th>
+                            <th>Recurring</th>
+                            <th>Transaction Type</th>
+                            <th>Payment Period</th>
                             <th>Delete</th>
                             <th>Edit</th>
                         </tr>
                     </thead>
-                    <tbody>{(this.state.data.map((bill) => {
+                    <tbody>{(this.global.data.map((bill) => {
                         return (
-                            <tr key={bill.title}>
+                            <tr key={bill._id}>
                                 <td>{bill.title}</td>
-                                <td>{bill.amount}</td>
+                                <td>${bill.amount}</td>
                                 <td>{new Date(bill.duedate).toLocaleDateString()}</td>
+                                <td>{bill.isRecurring.toString()}</td>
+                                <td>{bill.transactiontype}</td>
+                                <td>{bill.paymentperiod}</td>
                                 <td title="delete">
-                                    <input type="checkbox" value={bill._id} onChange={this.handleCheckChildeElement} />
+                                    <i className="trash icon"></i> <input type="checkbox" value={bill._id} onChange={this.handleCheckChildeElement} />
                                 </td>
                                 <td>
                                     <Link to={"/edit/bill/" + bill._id} >
@@ -126,7 +136,7 @@ class BillsList extends Component {
     renderMessage() {
         if (this.state.success !== "") {
             return (
-                <div className="ui green message">
+                <div className="ui success message">
                     <i className="check circle icon"></i> {this.state.success}
                 </div>
             );
@@ -141,7 +151,7 @@ class BillsList extends Component {
                 <Link to="/new/bill" className="circular ui green basic right floated button" style={{ marginBottom: '2em' }}>
                     <i className="plus icon"></i> New
                 </Link>
-                <h3>Bills List</h3>
+                <h3>Manage Bills</h3>
                 {this.renderMessage()}
                 {this.renderDeleteBtn()}
                 <div className={this.state.loader}></div>
