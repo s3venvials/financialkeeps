@@ -16,14 +16,14 @@ class PayList extends Component {
 
     componentDidMount() {
 
-        axios.get("http://localhost:5000/api/user/profile", { withCredentials: true })
+        axios.get("https://financialkeeps.herokuapp.com/api/user/profile", { withCredentials: true })
             .then((res) => {
                 this.setState({ grosspay: res.data.grosspay });
                 this.setState({ netpay: res.data.netpay });
                 this.setState({ frequencyofpay: res.data.frequencyofpay });
             });
 
-        axios.get("http://localhost:5000/api/bills", { withCredentials: true })
+        axios.get("https://financialkeeps.herokuapp.com/api/bills", { withCredentials: true })
             .then((res) => {
                 this.setState({ data: res.data });
                 this.setState({ loader: "" });

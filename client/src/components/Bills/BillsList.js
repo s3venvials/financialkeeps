@@ -23,7 +23,7 @@ class BillsList extends Component {
 
         this.setState({ selected: [] });
 
-        let url = "http://localhost:5000/api/delete";
+        let url = "https://financialkeeps.herokuapp.com/api/delete";
 
         let data = this.state.selected;
 
@@ -73,7 +73,7 @@ class BillsList extends Component {
     }
 
     componentDidMount() {
-        let url = "http://localhost:5000/api/bills";
+        let url = "https://financialkeeps.herokuapp.com/api/bills";
 
         axios.get(url, { withCredentials: true })
             .then((res) => {
