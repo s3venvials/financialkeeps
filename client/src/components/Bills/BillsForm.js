@@ -4,6 +4,8 @@ import _ from 'lodash';
 import formFields from './formFields';
 import axios from 'axios';
 
+import URI from '../../utils/network';
+
 class BillsForm extends Component {
 
     constructor(props) {
@@ -31,7 +33,6 @@ class BillsForm extends Component {
     }
 
     handleChecked(e) {
-        console.log(e.target.checked);
         const { name, checked } = e.target;
         this.setState({ [name]: checked });
     }
@@ -39,9 +40,9 @@ class BillsForm extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        const { title, amount, duedate, isRecurring, transactiontype, paymentperiod } = this.state;
+        const { title, amount, duedate, isRecurring, transactiontype, paymentperiod, frequencyofpay } = this.state;
 
-        let url = 'http://localhost:5000/api/new/bill';
+        let url = `${URI.URI}/api/new/bill`;
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 
@@ -50,11 +51,18 @@ class BillsForm extends Component {
         } else if (amount === "" || regexp.test(amount) === false) {
             this.setState({ error: "Please provide a valid bill amount." });
         } else {
-            axios.post(url, { title, amount, duedate, isRecurring, transactiontype, paymentperiod }, { withCredentials: true })
+            axios.post(url, { title, amount, duedate, isRecurring, transactiontype, paymentperiod, frequencyofpay }, { withCredentials: true })
                 .then((res) => {
                     window.location = "/managebills";
                 }).catch((e) => console.log(e));
         }
+    }
+
+    componentDidMount(){
+        axios.get(`${URI.URI}/api/user/profile`, { withCredentials: true })
+            .then((res) => {
+                this.setState({ frequencyofpay: res.data.frequencyofpay });
+            })
     }
 
     renderFields() {
@@ -89,7 +97,7 @@ class BillsForm extends Component {
             return (
                 <select name="paymentperiod" onChange={this.handleChange} >
                     <option value="">Select Payment Period...</option>
-                    <option value="PayDay1">PayDay1</option>
+                    <option value="Monthly PayDay1">Monthly PayDay1</option>
                 </select>
             );
         }
@@ -98,18 +106,18 @@ class BillsForm extends Component {
             return (
                 <select name="paymentperiod" onChange={this.handleChange} >
                     <option value="">Select Payment Period...</option>
-                    <option value="PayDay1">PayDay1</option>
-                    <option value="PayDay2">PayDay2</option>
+                    <option value="Bi - Weekly PayDay1">Bi - Weekly PayDay1</option>
+                    <option value="Bi - Weekly PayDay2">Bi - Weekly PayDay2</option>
                 </select>
             );
         } else {
             return (
                 <select name="paymentperiod" onChange={this.handleChange} >
                     <option value="">Select Payment Period...</option>
-                    <option value="PayDay1">PayDay1</option>
-                    <option value="PayDay2">PayDay2</option>
-                    <option value="PayDay3">PayDay3</option>
-                    <option value="PayDay4">PayDay4</option>
+                    <option value="Weekly PayDay1">Weekly PayDay1</option>
+                    <option value="Weekly PayDay2">Weekly PayDay2</option>
+                    <option value="Weekly PayDay3">Weekly PayDay3</option>
+                    <option value="Weekly PayDay4">Weekly PayDay4</option>
                 </select>
             );
         }
@@ -127,6 +135,7 @@ class BillsForm extends Component {
                         <input type="checkbox" checked={this.state.isRecurring} value={this.state.isRecurring} name="isRecurring" onChange={this.handleChecked} />
                     </div>
                     <div className="field">
+                        <label>Transaction Type</label>
                         <select name="transactiontype" onChange={this.handleChange}>
                             <option value="">Select Transaction Type...</option>
                             <option value="Manual">Manual</option>
@@ -134,6 +143,7 @@ class BillsForm extends Component {
                         </select>
                     </div>
                     <div className="field">
+                        <label>Payment Period</label>
                         {this.renderPaymentPeriodDropdown()}
                     </div>
                     <Link to="/managebills" className="ui red basic button">Cancel</Link>

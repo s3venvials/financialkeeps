@@ -1,6 +1,8 @@
 import React, { Component } from 'reactn';
 import axios from 'axios';
 
+import URI from '../utils/network';
+
 class EditProfile extends Component {
     constructor(props) {
         super(props)
@@ -41,7 +43,7 @@ class EditProfile extends Component {
 
         const { grosspay, netpay, frequencyofpay, newuser, id } = this.state;
 
-        let url = 'http://localhost:5000/api/update/user';
+        let url = `${URI.URI}/api/update/user`;
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 
@@ -70,7 +72,7 @@ class EditProfile extends Component {
     handleDelete(e) {
         e.preventDefault();
 
-        let url = "http://localhost:5000/api/delete/user";
+        let url = `${URI.URI}/api/delete/user`;
 
         const { id } = this.state;
 
@@ -81,7 +83,7 @@ class EditProfile extends Component {
     }
 
     componentDidMount() {
-        let url = "http://localhost:5000/api/user/profile";
+        let url = `${URI.URI}/api/user/profile`;
         axios.get(url, { withCredentials: true })
             .then((res) => {
                 this.setState({ username: res.data.username });

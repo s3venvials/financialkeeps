@@ -5,10 +5,26 @@ const Bill = mongoose.model('bills');
 
 module.exports = app => {
     app.post('/api/new/bill', requireLogin, async (req, res) => {
-        let { title, amount, duedate, isRecurring, transactiontype, paymentperiod } = req.body;
+        let { title, amount, duedate, isRecurring, transactiontype, paymentperiod, frequencyofpay } = req.body;
 
         if (duedate === "") {
             duedate = Date.now();
+        }
+
+        if (transactiontype === "") {
+            transactiontype = "Manual";
+        }
+
+        if (paymentperiod === "" && frequencyofpay === 1) {
+            paymentperiod = "Monthly PayDay1";
+        }
+
+        if (paymentperiod === "" && frequencyofpay === 2) {
+            paymentperiod = "Bi - Weekly PayDay1";
+        }
+
+        if (paymentperiod === "" && frequencyofpay === 4) {
+            paymentperiod = "Weekly PayDay1";
         }
 
         const Bills = new Bill({
@@ -78,13 +94,16 @@ module.exports = app => {
     });
 
     app.post("/edit/bill/update", (req, res) => {
-        let { title, amount, duedate, id } = req.body;
+        let { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod } = req.body;
 
         Bill.findByIdAndUpdate({ _id: id }, {
             $set: {
                 title,
                 amount,
-                duedate
+                duedate,
+                isRecurring,
+                transactiontype,
+                paymentperiod
             }
         }, (err, updatedBill) => {
             if (err) {
@@ -93,5 +112,29 @@ module.exports = app => {
                 res.send({ "success": `The bill ${updatedBill.title} was updated successfully!` });
             }
         });
+    });
+
+    app.post("/api/update/paid", async (req, res) => {
+        let { data } = req.body;
+
+        let error = "";
+
+        Bill.findByIdAndUpdate({ _id: data._id },
+            {
+                $set: {
+                    paid: data.paid
+                }
+            }, (err) => {
+                if (err) {
+                    error = err;
+                }
+            });
+
+        if (error !== "") {
+            res.send({ "error": error });
+        } else {
+            const bills = await Bill.find({ _user: req.user.id });
+            res.send({ "success": "Bills were deleted successfully!", bills });
+        }
     });
 };

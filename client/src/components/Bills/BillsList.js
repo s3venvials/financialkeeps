@@ -2,6 +2,8 @@ import React, { Component } from 'reactn';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import URI from '../../utils/network'
+
 class BillsList extends Component {
     constructor(props) {
         super(props)
@@ -23,7 +25,7 @@ class BillsList extends Component {
 
         this.setState({ selected: [] });
 
-        let url = "http://localhost:5000/api/delete";
+        let url = `${URI.URI}/api/delete`;
 
         let data = this.state.selected;
 
@@ -73,7 +75,7 @@ class BillsList extends Component {
     }
 
     componentDidMount() {
-        let url = "http://localhost:5000/api/bills";
+        let url = `${URI.URI}/api/bills`;
 
         axios.get(url, { withCredentials: true })
             .then((res) => {

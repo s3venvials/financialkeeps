@@ -8,8 +8,7 @@ import App from './components/App';
 import reducers from './reducers';
 
 setGlobal({
-    data: [],
-    frequencyofpay: 2
+    data: []
 });
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));

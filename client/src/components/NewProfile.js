@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import URI from '../utils/network';
+
 class NewProfile extends Component {
     constructor(props) {
         super(props)
@@ -38,7 +40,7 @@ class NewProfile extends Component {
 
         const { newuser } = this.state;
 
-        axios.post("http://localhost:5000/api/user/optout", { newuser }, { withCredentials: true })
+        axios.post(`${URI.URI}/api/user/optout`, { newuser }, { withCredentials: true })
             .then((res) => {
                 window.location = "/managebills";
             }).catch((e) => { console.log(e) });
@@ -49,7 +51,7 @@ class NewProfile extends Component {
 
         const { grosspay, netpay, frequencyofpay, newuser, id } = this.state;
 
-        let url = 'http://localhost:5000/api/user/new/profile';
+        let url = `${URI.URI}/api/user/new/profile`;
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 

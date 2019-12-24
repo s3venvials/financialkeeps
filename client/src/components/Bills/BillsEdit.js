@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 
+import URI from '../../utils/network';
+
 class BillsEdit extends Component {
     constructor(props) {
         super(props)
@@ -14,15 +16,17 @@ class BillsEdit extends Component {
             transactiontype: "",
             paymentperiod: "",
             id: "",
-            error: ""
+            error: "",
+            frequencyofpay: 2
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChecked = this.handleChecked.bind(this);
     }
 
     componentDidMount() {
-        let url = "http://localhost:5000/edit/bill/" + this.props.match.params.id;
+        let url = `${URI.URI}/edit/bill/` + this.props.match.params.id;
 
         axios.get(url)
             .then((res) => {
@@ -33,6 +37,11 @@ class BillsEdit extends Component {
                 this.setState({ transactiontype: res.data.transactiontype });
                 this.setState({ paymentperiod: res.data.paymentperiod });
                 this.setState({ id: res.data._id });
+            });
+
+        axios.get(`${URI.URI}/api/user/profile`, { withCredentials: true })
+            .then((res) => {
+                this.setState({ frequencyofpay: res.data.frequencyofpay });
             })
     }
 
@@ -42,7 +51,6 @@ class BillsEdit extends Component {
     }
 
     handleChecked(e) {
-        console.log(e.target.checked);
         const { name, checked } = e.target;
         this.setState({ [name]: checked });
     }
@@ -51,7 +59,7 @@ class BillsEdit extends Component {
         e.preventDefault();
 
         const { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod } = this.state;
-        let url = "http://localhost:5000/edit/bill/update";
+        let url = `${URI.URI}/edit/bill/update`;
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 
@@ -73,6 +81,39 @@ class BillsEdit extends Component {
             return <div className="ui red message">{this.state.error}</div>
         } else {
             return null;
+        }
+    }
+
+    renderPaymentPeriodDropdown() {
+        let { frequencyofpay } = this.state;
+
+        if (frequencyofpay === 1) {
+            return (
+                <select name="paymentperiod" onChange={this.handleChange} >
+                    <option value={this.state.paymentperiod}>{this.state.paymentperiod}</option>
+                    <option value="Monthly PayDay1">Monthly PayDay1</option>
+                </select>
+            );
+        }
+
+        if (frequencyofpay === 2) {
+            return (
+                <select name="paymentperiod" onChange={this.handleChange} >
+                    <option value={this.state.paymentperiod}>{this.state.paymentperiod}</option>
+                    <option value="Bi - Weekly PayDay1">Bi - Weekly PayDay1</option>
+                    <option value="Bi - Weekly PayDay2">Bi - Weekly PayDay2</option>
+                </select>
+            );
+        } else {
+            return (
+                <select name="paymentperiod" onChange={this.handleChange} >
+                    <option value={this.state.paymentperiod}>{this.state.paymentperiod}</option>
+                    <option value="Weekly PayDay1">Weekly PayDay1</option>
+                    <option value="Weekly PayDay2">Weekly PayDay2</option>
+                    <option value="Weekly PayDay3">Weekly PayDay3</option>
+                    <option value="Weekly PayDay4">Weekly PayDay4</option>
+                </select>
+            );
         }
     }
 
@@ -103,19 +144,17 @@ class BillsEdit extends Component {
                             </div>
 
                             <div className="field">
+                                <label>Transaction Type</label>
                                 <select name="transactiontype" onChange={this.handleChange}>
                                     <option value={this.state.transactiontype}>{this.state.transactiontype}</option>
                                     <option value="Manual">Manual</option>
-                                    <option value="Auto">Automatic</option>
+                                    <option value="Automatic">Automatic</option>
                                 </select>
                             </div>
 
                             <div className="field">
-                                <select name="paymentperiod" onChange={this.handleChange} >
-                                    <option value="this.state.paymentperiod">{this.state.paymentperiod}</option>
-                                    <option value="PayDay1">PayDay1</option>
-                                    <option value="PayDay2">PayDay2</option>
-                                </select>
+                                <label>Payment Period</label>
+                                {this.renderPaymentPeriodDropdown()}
                             </div>
 
                             <input type="hidden" name="id" value={this.state.id} />

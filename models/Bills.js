@@ -8,7 +8,8 @@ const billsSchema = new Schema({
     isChecked: { type: Boolean, default: false },
     isRecurring: { type: Boolean, default: false },
     transactiontype: { type: String, default: "Manual" },
-    paymentperiod: { type: String, default: "PayDay1" },
+    paymentperiod: { type: String, default: "Bi - Weekly PayDay1" },
+    paid: { type: Boolean, default: false },
     _user: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
