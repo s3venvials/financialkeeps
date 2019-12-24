@@ -41,7 +41,7 @@ class EditProfile extends Component {
 
         const { grosspay, netpay, frequencyofpay, newuser, id } = this.state;
 
-        let url = 'https://financialkeeps.herokuapp.com/api/update/user';
+        let url = 'http://localhost:5000/api/update/user';
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 
@@ -70,7 +70,7 @@ class EditProfile extends Component {
     handleDelete(e) {
         e.preventDefault();
 
-        let url = "https://financialkeeps.herokuapp.com/api/delete/user";
+        let url = "http://localhost:5000/api/delete/user";
 
         const { id } = this.state;
 
@@ -81,7 +81,7 @@ class EditProfile extends Component {
     }
 
     componentDidMount() {
-        let url = "https://financialkeeps.herokuapp.com/api/user/profile";
+        let url = "http://localhost:5000/api/user/profile";
         axios.get(url, { withCredentials: true })
             .then((res) => {
                 this.setState({ username: res.data.username });

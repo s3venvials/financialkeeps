@@ -22,7 +22,7 @@ class BillsEdit extends Component {
     }
 
     componentDidMount() {
-        let url = "https://financialkeeps.herokuapp.com/edit/bill/" + this.props.match.params.id;
+        let url = "http://localhost:5000/edit/bill/" + this.props.match.params.id;
 
         axios.get(url)
             .then((res) => {
@@ -51,7 +51,7 @@ class BillsEdit extends Component {
         e.preventDefault();
 
         const { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod } = this.state;
-        let url = "https://financialkeeps.herokuapp.com/edit/bill/update";
+        let url = "http://localhost:5000/edit/bill/update";
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 
@@ -63,7 +63,7 @@ class BillsEdit extends Component {
 
             axios.post(url, { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod })
                 .then((res) => {
-                    window.location = "/dashboard";
+                    window.location = "/managebills";
                 }).catch((e) => console.log(e));
         }
     }

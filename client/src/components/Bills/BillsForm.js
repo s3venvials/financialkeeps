@@ -41,7 +41,7 @@ class BillsForm extends Component {
 
         const { title, amount, duedate, isRecurring, transactiontype, paymentperiod } = this.state;
 
-        let url = 'https://financialkeeps.herokuapp.com/api/new/bill';
+        let url = 'http://localhost:5000/api/new/bill';
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 

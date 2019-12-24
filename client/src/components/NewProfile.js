@@ -38,7 +38,7 @@ class NewProfile extends Component {
 
         const { newuser } = this.state;
 
-        axios.post("https://financialkeeps.herokuapp.com/api/user/optout", { newuser }, { withCredentials: true })
+        axios.post("http://localhost:5000/api/user/optout", { newuser }, { withCredentials: true })
             .then((res) => {
                 window.location = "/managebills";
             }).catch((e) => { console.log(e) });
@@ -49,7 +49,7 @@ class NewProfile extends Component {
 
         const { grosspay, netpay, frequencyofpay, newuser, id } = this.state;
 
-        let url = 'https://financialkeeps.herokuapp.com/api/user/new/profile';
+        let url = 'http://localhost:5000/api/user/new/profile';
 
         let regexp = /^\d+(\.\d{1,2})?$/;
 
