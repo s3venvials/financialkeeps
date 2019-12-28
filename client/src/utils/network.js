@@ -1,5 +1,5 @@
 module.exports = {
-    URI: "http://localhost:5000"
+    URI: "https://financialkeeps.herokuapp.com"
     //https://financialkeeps.herokuapp.com
     //http://localhost:5000
 }
