@@ -62,14 +62,14 @@ class BillsEdit extends Component {
         let url = `${URI.URI}/edit/bill/update`;
 
         let regexp = /^\d+(\.\d{1,2})?$/;
-        let regexpdate = /^\d{2}-\d{2}-\d{4}$/;
+        let regexpdate = /^\d{4}-\d{2}-\d{2}$/;
 
         if (title === "") {
             this.setState({ error: "Please provide a bill title." });
         } else if (amount === "" || regexp.test(amount) === false) {
             this.setState({ error: "Please provide a valid bill amount." });
         } else if (duedate === "" || regexpdate.test(duedate) === false) {
-            this.setState({ error: "Please provide a valid due date. (MM/DD/YYYY)" });
+            this.setState({ error: "Please provide a valid due date. (YYYY/MM/DD)" });
         } else {
 
             axios.post(url, { title, amount, duedate, id, isRecurring, transactiontype, paymentperiod })

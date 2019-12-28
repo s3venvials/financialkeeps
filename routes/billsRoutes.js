@@ -9,11 +9,9 @@ module.exports = app => {
 
         if (duedate === "") {
             let current_datetime = new Date()
-            let formatted_date = (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + "-" + current_datetime.getFullYear() 
+            let formatted_date =  current_datetime.getFullYear()  + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
             duedate = formatted_date;
-         }
-
-        console.log(duedate);
+         } 
 
         if (transactiontype === "") {
             transactiontype = "Manual";
