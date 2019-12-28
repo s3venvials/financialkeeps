@@ -56,9 +56,11 @@ class NewProfile extends Component {
         let regexp = /^\d+(\.\d{1,2})?$/;
 
         if (grosspay === "" || regexp.test(grosspay) === false) {
-            this.setState({ error: "Please provide a valid pross amount." });
+            this.setState({ error: "Please provide a valid gross amount." });
         } else if (netpay === "" || regexp.test(netpay) === false) {
             this.setState({ error: "Please provide a valid net amount." });
+        } else if (frequencyofpay === "") {
+            this.setState({ error: "Please select a frequency of pay." });
         } else {
             axios.post(url, { grosspay, netpay, frequencyofpay, newuser, id }, { withCredentials: true })
                 .then((res) => {

@@ -113,7 +113,7 @@ class BillsList extends Component {
                             <tr key={bill._id}>
                                 <td>{bill.title}</td>
                                 <td>${bill.amount}</td>
-                                <td>{new Date(bill.duedate).toLocaleDateString()}</td>
+                                <td>{bill.duedate}</td>
                                 <td>{bill.isRecurring.toString()}</td>
                                 <td>{bill.transactiontype}</td>
                                 <td>{bill.paymentperiod}</td>

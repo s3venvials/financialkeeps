@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const billsSchema = new Schema({
     title: String,
     amount: String,
-    duedate: { type: Date, default: Date.now },
+    duedate: String,
     isChecked: { type: Boolean, default: false },
     isRecurring: { type: Boolean, default: false },
     transactiontype: { type: String, default: "Manual" },

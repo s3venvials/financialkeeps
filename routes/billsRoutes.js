@@ -8,8 +8,12 @@ module.exports = app => {
         let { title, amount, duedate, isRecurring, transactiontype, paymentperiod, frequencyofpay } = req.body;
 
         if (duedate === "") {
-            duedate = Date.now();
-        }
+            let current_datetime = new Date()
+            let formatted_date = (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + "-" + current_datetime.getFullYear() 
+            duedate = formatted_date;
+         }
+
+        console.log(duedate);
 
         if (transactiontype === "") {
             transactiontype = "Manual";
